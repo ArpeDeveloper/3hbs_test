@@ -4,62 +4,45 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-//use App\Traits\ApiResponser;
+use App\Traits\ApiResponser;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
+	use ApiResponser;
+
     public function login(Request $request)
     {    
     	try{
-    		$jsonResponse=[];
-    		$code=401;
 	        $validator = \Validator::make($request->all(), [ 
 				'email' => 'required|string|email|',
 	            'password' => 'required|string'
 			]);
 
 			if ($validator->fails()) {
-				$jsonResponse = [
-					'ok' => false,
-					'message' => 'Invalid input data'
-				];
-				$code = 400;
-			}else{
-		        if (!Auth::attempt($validator->validated())) {
-		        	$jsonResponse = [
-						'ok' => false,
-						'message' => 'Invalid Credentials'
-					];
-		        }else{
-					$code = 200;
-					$jsonResponse = [
-						'ok' => true,
-						'message' => '',
-						'data' => [
-				            'token' => auth()->user()->createToken('API Token')->plainTextToken
-				        ]
-					];
-				}
+				return $this->error('Invalid input data',400);
 			}
-	    }catch(\Exception $e){
-	    	$code = 500;
-			$jsonResponse = [
-				'ok' => false,
-				'message' => 'an error has ocurred'
-			];
-	    }
-	    return response()->json($jsonResponse, $code);
 
+	        if (!Auth::attempt($validator->validated())) {
+	        	return $this->error('Invalid credentials',401);
+	        }
+			return $this->success([
+				'token' => auth()->user()->createToken('API Token')->plainTextToken
+			]);
+				
+	    }catch(\Exception $e){
+			return $this->error('An error has ocurred',500);
+	    }
     }
 
     public function logout()
     {
-        auth()->user()->tokens()->delete();
-
-        return [
-            'message' => 'Tokens Revoked'
-        ];
+    	try{
+	        auth()->user()->tokens()->delete();
+	        return $this->success();
+	    }catch(\Exception $e){
+			return $this->error('An error has ocurred',500);
+	    }
     }
 }
