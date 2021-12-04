@@ -20,6 +20,6 @@ class UserSeeder extends Seeder
         $user->email = 'admin@outlook.com';
         $user->password =  Hash::make('admin');
         $user->save();
-        //$user->roles()->attach(Role::where('name', 'admin')->first());
+        $user->roles()->attach(Role::where('name', 'admin')->first());
     }
 }

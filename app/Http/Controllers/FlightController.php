@@ -15,9 +15,12 @@ class FlightController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         try{
+            if ($request->user()->cannot('viewAny', Flight::class)) {
+                return $this->error('Forbidden',403);
+            }
             return $this->success(Flight::with(['airline','departureAirport','destinationAirport'])->get());
         }catch(\Exception $e){
             return $this->error('An error has ocurred',500);
@@ -33,6 +36,9 @@ class FlightController extends Controller
     public function store(Request $request)
     {
         try{
+            if ($request->user()->cannot('create', Flight::class)) {
+                return $this->error('Forbidden',403);
+            }
             $validator = \Validator::make($request->all(), [ 
                 'code' => 'required|string',
                 'type' => 'required|string|in:PASSENGER,FREIGHT',
@@ -50,6 +56,7 @@ class FlightController extends Controller
             $flight = Flight::create($validator->validated());
             return $this->success($flight);
         }catch(\Exception $e){
+            var_dump($e);die;
             return $this->error('An error has ocurred',500);
         }
     }
@@ -63,6 +70,9 @@ class FlightController extends Controller
     public function show($id)
     {
         try{
+            if ($request->user()->cannot('view', Flight::class)) {
+                return $this->error('Forbidden',403);
+            }
 
             if (!isset($id))
                 return $this->error('Invalid input data',400);
@@ -89,6 +99,10 @@ class FlightController extends Controller
     public function update(Request $request, $id)
     {
         try{
+            if ($request->user()->cannot('update', Flight::class)) {
+                return $this->error('Forbidden',403);
+            }
+
             if (!isset($id))
                 return $this->error('Invalid input data',400);
 
@@ -123,6 +137,10 @@ class FlightController extends Controller
     public function destroy($id)
     {
         try{
+            if ($request->user()->cannot('delete', Flight::class)) {
+                return $this->error('Forbidden',403);
+            }
+
             if (!isset($id))
                 return $this->error('Invalid input data',400);
             
