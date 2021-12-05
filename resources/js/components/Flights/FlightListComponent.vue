@@ -39,24 +39,49 @@
                                     <v-text-field
                                     v-model="flight.code"
                                     label="Code"></v-text-field>
-                                    <v-text-field
-                                    v-model="flight.type"
-                                    label="Type"></v-text-field>
-                                    <v-text-field
-                                    v-model="flight.departure_time"
-                                    label="Departure time"></v-text-field>
-                                    <v-text-field
-                                    v-model="flight.arrival_time"
-                                    label="Arrival time"></v-text-field>
-                                    <v-text-field
-                                    v-model="flight.departure_id"
-                                    label="Departure airport"></v-text-field>
-                                    <v-text-field
-                                    v-model="flight.destination_id"
-                                    label="Destination airport"></v-text-field>
-                                    <v-text-field
-                                    v-model="flight.airline_id"
-                                    label="Airline"></v-text-field>
+                                    <v-select
+                                        v-model="flight.type"
+                                        :items="types"
+                                        label="Type"
+                                    ></v-select>
+                                    <v-datetime-picker label="Departure time" v-model="flight.departure_time" > 
+                                        <template v-slot:dateIcon>
+                                            <v-icon>mdi-calendar</v-icon>
+                                        </template>
+                                        <template v-slot:timeIcon>
+                                            <v-icon>mdi-clock</v-icon>
+                                        </template>
+                                    </v-datetime-picker>
+                                    <v-datetime-picker label="Arrival time" v-model="flight.arrival_time" > 
+                                        <template v-slot:dateIcon>
+                                            <v-icon>mdi-calendar</v-icon>
+                                        </template>
+                                        <template v-slot:timeIcon>
+                                            <v-icon>mdi-clock</v-icon>
+                                        </template>
+                                    </v-datetime-picker>
+                                    <v-select
+                                      v-model="flight.departure_id"
+                                      :items="airports"
+                                      item-text="name"
+                                      item-value="id"
+                                      label="Departure"
+                                    ></v-select>
+                                    <v-select
+                                      v-model="flight.destination_id"
+                                      :items="airports"
+                                      item-text="name"
+                                      item-value="id"
+                                      label="Destination"
+                                    ></v-select>
+                                    <v-select
+                                      v-model="flight.airline_id"
+                                      :items="airlines"
+                                      item-text="name"
+                                      item-value="id"
+                                      label="Airline"
+                                    ></v-select>
+                                    
                                 </v-container>
                             </v-card-text>
 
@@ -67,7 +92,7 @@
                                 text
                                 @click="close">Cancel</v-btn>
                               <v-btn
-                                color="blue darken-1"
+                                color="success"
                                 text
                                 @click="save">Save</v-btn>
                             </v-card-actions>
@@ -82,7 +107,7 @@
                         <v-card-actions>
                           <v-spacer></v-spacer>
                           <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
-                          <v-btn color="blue darken-1" text @click="deleteItemConfirm">OK</v-btn>
+                          <v-btn color="danger" text @click="deleteItemConfirm">OK</v-btn>
                           <v-spacer></v-spacer>
                         </v-card-actions>
                       </v-card>
@@ -98,9 +123,7 @@
                 @click="deleteItem(item)">mdi-delete</v-icon>
             </template>
             <template v-slot:no-data>
-              <v-btn
-                color="primary"
-                @click="getFlights">Reset</v-btn>
+              <p>There are no flights</p>
             </template>
         </v-data-table>
 </template>
@@ -121,11 +144,14 @@
                     {text:"Type",value:"type"},
                     {text:"Airline",value:"airline.name"},
                     {text:"Departure",value:"departure_airport.name"},
+                    {text:"Time",value:"departure_time"},
                     {text:"Destination",value:"destination_airport.name"},
+                    {text:"Time",value:"arrival_time"},
                     { value: 'actions', text: 'Actions', sortable: false }
                 ],
                 airlines:[],
                 airports:[],
+                types:["PASSENGER","FREIGHT"],
                 editing: false,
                 deleting: false,
                 flight: {},
@@ -192,9 +218,23 @@
                 }
             },
             close(){
+                this.editing = false;
                 this.dialog = false;
+                this.flight = {};
             },
             save(){
+                if(this.flight.departure_time){
+                    const dt = this.flight.departure_time.toLocaleString();
+                    const date = new Date( Date.parse(dt));
+                    const fullDate = date.getFullYear() + "-" +date.getMonth() + "-" + date.getDate() + " " + date.getHours() + ":" + date. getMinutes();
+                    this.flight.departure_time = fullDate;
+                }
+                if(this.flight.arrival_time){
+                    const dt = this.flight.arrival_time.toLocaleString();
+                    const date = new Date( Date.parse(dt));
+                    const fullDate = date.getFullYear() + "-" +date.getMonth() + "-" + date.getDate() + " " + date.getHours() + ":" + date. getMinutes();
+                    this.flight.arrival_time = fullDate;
+                }
                 if(!this.editing){
                     const req = api().flights().create(this.flight,localStorage.tokenAuth);
                     req.then(this.successSaveFlight.bind(this)).catch(this.errorSaveFlight.bind(this));
@@ -209,9 +249,7 @@
                         this.saveError = e.data.message;
                     }
                 }else{
-                    this.editing = false;
-                    this.dialog = false;
-                    this.flight = {};
+                    this.close();
                     this.getFlights();
                 }
             },
@@ -244,11 +282,7 @@
                 }
             },
             editItem(item){
-                this.formTitle ="Edit flight";
-                this.editing = true;
-                this.deleting = false;
-                this.flight = item;
-                this.dialog = true;
+                this.openDialog("Edit flight",item,true);
             },
             deleteItem(item){
                 this.editing = false;
@@ -263,11 +297,18 @@
                 this.dialogDelete = false;
             },
             newFlight(){
-                this.formTitle ="New flight";
-                this.editing = false;
+                this.openDialog("New flight",{},false);
+            },
+            openDialog(title,item,editing){
+                this.formTitle =title;
+                this.editing = editing;
                 this.deleting = false;
-                this.flight = {};
+                this.flight = item;
                 this.dialog = true;
+                if(this.airports.length <= 0)
+                    this.getAirports();
+                if(this.airlines.length <= 0)
+                    this.getAirlines();
             }
         }
     }

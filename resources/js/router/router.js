@@ -30,7 +30,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
 	if (to.name != "login" && !localStorage.tokenAuth){
-   		next({ name: 'login' })
+   		next({ name: 'login' });
 	}
   else next()
 })

@@ -32,7 +32,6 @@ class Flight extends Model
      * @var array
      */
     protected $casts = [
-        'departure_time' => 'datetime',
     ];
 
     /**

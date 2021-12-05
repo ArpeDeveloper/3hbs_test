@@ -8,7 +8,10 @@
 
  window.Vue = require('vue').default;
  import vuetify from './vuetify';
+ import DatetimePicker from 'vuetify-datetime-picker';
  import router from './router/router';
+
+ Vue.use(DatetimePicker);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

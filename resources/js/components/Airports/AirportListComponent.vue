@@ -86,9 +86,7 @@
                 @click="deleteItem(item)">mdi-delete</v-icon>
             </template>
             <template v-slot:no-data>
-              <v-btn
-                color="primary"
-                @click="getAirports">Reset</v-btn>
+              <p>There are no airports</p>
             </template>
         </v-data-table>
 </template>
