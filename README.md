@@ -44,8 +44,8 @@
 ```composer install```
 3. Ejecutar el comando 
 ```npm install```
-4. Copiar el archivo .env.example y renombrarlo a .env
-5. Cambiar las variables del archivo .env como la configuaración de la base de datos (nombre, usuario, contraseña) 
+4. Copiar el archivo ***.env.example*** y renombrarlo a ***.env***
+5. Cambiar las variables del archivo **.env** como la configuaración de la base de datos (nombre, usuario, contraseña) y la url del api en VUE ***MIX_API_HOST***
 6. Generar la llave del proyecto 
 ```php artisan key:generate```
 7. Crear una base de datos
@@ -53,7 +53,6 @@
 ```php artisan migrate```
 9. Ejecutar los seeders 
 ```php artisan db:seed```
-10. Cambiar las variables del archivo env de vue
-11. El usuario con el rol "admin" es: admin@outlook.com y su contraseña es: admin
-12. Los otros usuarios con el rol "operations" tienen la contraseña: password
+11. El usuario con el rol "admin" es: ***admin@outlook.com*** y su contraseña es: ***admin***
+12. Los otros usuarios con el rol "operations" tienen la contraseña: ***password***
 
