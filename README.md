@@ -39,16 +39,21 @@
 - Implementar modelo polimórfico de Remarks y relacionar con modelos creados
 
 # Instrucciones para ejecutar el proyecto:
-- Clonar el proyecto del repositorio
-- Ejecutar el comando composer install
-- Ejecutar el comando npm install
-- Copiar el archivo .env.example y renombrarlo a .env
-- Cambiar las variables del archivo .env como la configuaración de la base de datos (nombre, usuario, contraseña) 
-- Generar la llave del proyecto php artisan key: generate
-- Crear una base de datos
-- Ejecutar las migraciones php artisan migrate
-- Ejecutar los seeders php artisan db:seed
-- Cambiar las variables del archivo env de vue
-- El usuario con el rol "admin" es: admin@outlook.com y su contraseña es: admin
-- Los otros usuarios con el rol "operations" tienen la contraseña: password
+1. Clonar el proyecto del repositorio
+2. Ejecutar el comando 
+```composer install```
+3. Ejecutar el comando 
+```npm install```
+4. Copiar el archivo .env.example y renombrarlo a .env
+5. Cambiar las variables del archivo .env como la configuaración de la base de datos (nombre, usuario, contraseña) 
+6. Generar la llave del proyecto 
+```php artisan key:generate```
+7. Crear una base de datos
+8. Ejecutar las migraciones 
+```php artisan migrate```
+9. Ejecutar los seeders 
+```php artisan db:seed```
+10. Cambiar las variables del archivo env de vue
+11. El usuario con el rol "admin" es: admin@outlook.com y su contraseña es: admin
+12. Los otros usuarios con el rol "operations" tienen la contraseña: password
 
