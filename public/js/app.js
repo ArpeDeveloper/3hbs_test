@@ -6130,6 +6130,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'NavbarComponent',
@@ -36805,12 +36808,13 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticStyle: { height: "100%" } },
     [
       _vm.isLogged
         ? _c(
             "v-card",
             {
-              staticClass: "mx-auto overflow-hidden",
+              staticClass: "mx-auto overflow-hidden pb-5",
               attrs: { height: "100%", width: "100%" },
             },
             [
@@ -36818,7 +36822,13 @@ var render = function () {
                 "v-app-bar",
                 {
                   staticStyle: { "border-radius": "0" },
-                  attrs: { color: "deep-purple accent-4", dark: "" },
+                  attrs: {
+                    absolute: "",
+                    "elevate-on-scroll": "",
+                    color: "deep-purple accent-4",
+                    dark: "",
+                    "scroll-target": "#content-page",
+                  },
                 },
                 [
                   _c("v-app-bar-nav-icon", {
@@ -36925,7 +36935,16 @@ var render = function () {
                 1
               ),
               _vm._v(" "),
-              _c("v-card-text", [_c("router-view")], 1),
+              _c(
+                "v-card-text",
+                {
+                  staticClass: "overflow-y-auto mt-16",
+                  staticStyle: { height: "100%" },
+                  attrs: { id: "content-page" },
+                },
+                [_c("router-view")],
+                1
+              ),
             ],
             1
           )

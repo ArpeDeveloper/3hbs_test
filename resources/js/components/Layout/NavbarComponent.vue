@@ -1,14 +1,17 @@
 <template>
-  <div>
+  <div style="height:100%;">
     <v-card v-if="isLogged"
-    class="mx-auto overflow-hidden"
+    class="mx-auto overflow-hidden pb-5"
     height="100%"
     width="100%"
   >
     <v-app-bar
+      absolute
+      elevate-on-scroll
       color="deep-purple accent-4"
       dark
       style="border-radius:0;"
+      scroll-target="#content-page"
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-spacer></v-spacer>
@@ -46,7 +49,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-card-text>
+    <v-card-text id="content-page" class="overflow-y-auto mt-16" style="height:100%">
       <router-view />
     </v-card-text>
   </v-card>
