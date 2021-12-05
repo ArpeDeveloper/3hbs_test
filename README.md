@@ -38,7 +38,7 @@
 ### Puntos extras: 
 - Implementar modelo polimórfico de Remarks y relacionar con modelos creados
 
-#Instrucciones para ejecutar el proyecto:
+# Instrucciones para ejecutar el proyecto:
 - Clonar el proyecto del repositorio
 - Ejecutar el comando composer install
 - Ejecutar el comando npm install
