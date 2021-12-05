@@ -5927,6 +5927,11 @@ __webpack_require__.r(__webpack_exports__);
       if (e.response.data.message) {
         //this.renderError(e.response.data.message);
         console.error(e.response.data.message);
+
+        if (e.response.status == "403") {
+          this.$root.$emit("canFlights", false);
+          this.$router.push("/airports");
+        }
       }
     },
     close: function close() {
@@ -6007,6 +6012,125 @@ __webpack_require__.r(__webpack_exports__);
       this.deleting = false;
       this.flight = {};
       this.dialog = true;
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Layout/NavbarComponent.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Layout/NavbarComponent.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _api_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../api/api */ "./resources/js/api/api.js");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  name: 'NavbarComponent',
+  props: {},
+  data: function data() {
+    return {
+      canFlights: true,
+      isLogged: false,
+      drawer: false
+    };
+  },
+  mounted: function mounted() {
+    this.isLogged = this.$router.currentRoute.name != "login";
+    this.$root.$on("login", function (login) {
+      this.isLogged = login;
+    }.bind(this));
+    this.$root.$on("canFlights", function (canFlights) {
+      this.canFlights = canFlights;
+    }.bind(this));
+  },
+  updated: function updated() {
+    var isLogged = localStorage.tokenAuth && this.$router.currentRoute.name != "login";
+    if (!isLogged) this.deleteSession();
+  },
+  methods: {
+    logout: function logout() {
+      var req = (0,_api_api__WEBPACK_IMPORTED_MODULE_0__.api)().logout(localStorage.tokenAuth);
+      req.then(this.successCallback.bind(this));
+    },
+    successCallback: function successCallback(e) {
+      if (!e.data.ok) {
+        if (e.data.message) {
+          //this.renderError(e.data.message);
+          console.error(e.data.message);
+        }
+      } else {
+        this.deleteSession();
+      }
+    },
+    deleteSession: function deleteSession() {
+      if (this.$router.currentRoute.name != "login") {
+        this.isLogged = false;
+        delete localStorage.tokenAuth;
+        this.$router.push("/");
+      }
     }
   }
 });
@@ -6108,6 +6232,7 @@ __webpack_require__.r(__webpack_exports__);
         }
       } else {
         localStorage.tokenAuth = e.data.data.token;
+        this.$root.$emit("login", true);
         this.$router.push('/flights');
       }
     }
@@ -6154,12 +6279,27 @@ function api() {
     login: function login(data) {
       return axios.post(apiUrl + '/login', data);
     },
+    logout: function logout(token) {
+      return axios.post(apiUrl + '/logout', {}, {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        validateStatus: function validateStatus(status) {
+          if (status == 401) delete localStorage.tokenAuth;
+          return status >= 200 && status < 300; // default
+        }
+      });
+    },
     flights: function flights() {
       return {
         all: function all(token) {
           return axios.get(apiUrl + '/flights', {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         },
@@ -6167,6 +6307,10 @@ function api() {
           return axios.put(apiUrl + '/flights/' + data.id, data, {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         },
@@ -6174,6 +6318,10 @@ function api() {
           return axios.post(apiUrl + '/flights', data, {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         },
@@ -6181,6 +6329,10 @@ function api() {
           return axios["delete"](apiUrl + '/flights/' + data.id, {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         }
@@ -6192,6 +6344,10 @@ function api() {
           return axios.get(apiUrl + '/airlines', {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         },
@@ -6199,6 +6355,10 @@ function api() {
           return axios.put(apiUrl + '/airlines/' + data.id, data, {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         },
@@ -6206,6 +6366,10 @@ function api() {
           return axios.post(apiUrl + '/airlines', data, {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         },
@@ -6213,6 +6377,10 @@ function api() {
           return axios["delete"](apiUrl + '/airlines/' + data.id, {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         }
@@ -6224,6 +6392,10 @@ function api() {
           return axios.get(apiUrl + '/airports', {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         },
@@ -6231,6 +6403,10 @@ function api() {
           return axios.put(apiUrl + '/airports/' + data.id, data, {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         },
@@ -6238,6 +6414,10 @@ function api() {
           return axios.post(apiUrl + '/airports', data, {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         },
@@ -6245,6 +6425,10 @@ function api() {
           return axios["delete"](apiUrl + '/airports/' + data.id, {
             headers: {
               'Authorization': 'Bearer ' + token
+            },
+            validateStatus: function validateStatus(status) {
+              if (status == 401) delete localStorage.tokenAuth;
+              return status >= 200 && status < 300; // default
             }
           });
         }
@@ -6283,7 +6467,8 @@ window.Vue = (__webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
  */
-// const files = require.context('./', true, /\.vue$/i)
+
+Vue.component('navbar-component', (__webpack_require__(/*! ./components/Layout/NavbarComponent.vue */ "./resources/js/components/Layout/NavbarComponent.vue")["default"])); // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 /**
@@ -6362,7 +6547,8 @@ var Airports = vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('airportlis
 var Airlines = vue__WEBPACK_IMPORTED_MODULE_0__["default"].component('airlinelist-component', (__webpack_require__(/*! ../components/Airlines/AirlineListComponent.vue */ "./resources/js/components/Airlines/AirlineListComponent.vue")["default"]));
 var routes = [{
   path: '/',
-  component: Login
+  component: Login,
+  name: "login"
 }, {
   path: '/flights',
   component: Flights
@@ -6388,6 +6574,13 @@ var routes = [{
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   routes: routes // short for `routes: routes`
 
+});
+router.beforeEach(function (to, from, next) {
+  if (to.name != "login" && !localStorage.tokenAuth) {
+    next({
+      name: 'login'
+    });
+  } else next();
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (router);
 
@@ -29407,6 +29600,45 @@ component.options.__file = "resources/js/components/Flights/FlightListComponent.
 
 /***/ }),
 
+/***/ "./resources/js/components/Layout/NavbarComponent.vue":
+/*!************************************************************!*\
+  !*** ./resources/js/components/Layout/NavbarComponent.vue ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _NavbarComponent_vue_vue_type_template_id_0cbadc1a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NavbarComponent.vue?vue&type=template&id=0cbadc1a& */ "./resources/js/components/Layout/NavbarComponent.vue?vue&type=template&id=0cbadc1a&");
+/* harmony import */ var _NavbarComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NavbarComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/Layout/NavbarComponent.vue?vue&type=script&lang=js&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+;
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _NavbarComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _NavbarComponent_vue_vue_type_template_id_0cbadc1a___WEBPACK_IMPORTED_MODULE_0__.render,
+  _NavbarComponent_vue_vue_type_template_id_0cbadc1a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Layout/NavbarComponent.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/LoginComponent.vue":
 /*!****************************************************!*\
   !*** ./resources/js/components/LoginComponent.vue ***!
@@ -29533,6 +29765,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/Layout/NavbarComponent.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************!*\
+  !*** ./resources/js/components/Layout/NavbarComponent.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NavbarComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./NavbarComponent.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Layout/NavbarComponent.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_NavbarComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/components/LoginComponent.vue?vue&type=script&lang=js&":
 /*!*****************************************************************************!*\
   !*** ./resources/js/components/LoginComponent.vue?vue&type=script&lang=js& ***!
@@ -29612,6 +29860,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FlightListComponent_vue_vue_type_template_id_1dcc34a8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_FlightListComponent_vue_vue_type_template_id_1dcc34a8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./FlightListComponent.vue?vue&type=template&id=1dcc34a8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Flights/FlightListComponent.vue?vue&type=template&id=1dcc34a8&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Layout/NavbarComponent.vue?vue&type=template&id=0cbadc1a&":
+/*!*******************************************************************************************!*\
+  !*** ./resources/js/components/Layout/NavbarComponent.vue?vue&type=template&id=0cbadc1a& ***!
+  \*******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NavbarComponent_vue_vue_type_template_id_0cbadc1a___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NavbarComponent_vue_vue_type_template_id_0cbadc1a___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_NavbarComponent_vue_vue_type_template_id_0cbadc1a___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./NavbarComponent.vue?vue&type=template&id=0cbadc1a& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Layout/NavbarComponent.vue?vue&type=template&id=0cbadc1a&");
 
 
 /***/ }),
@@ -30642,6 +30907,160 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Layout/NavbarComponent.vue?vue&type=template&id=0cbadc1a&":
+/*!**********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Layout/NavbarComponent.vue?vue&type=template&id=0cbadc1a& ***!
+  \**********************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _vm.isLogged
+        ? _c(
+            "v-card",
+            {
+              staticClass: "mx-auto overflow-hidden",
+              attrs: { height: "100%", width: "100%" },
+            },
+            [
+              _c(
+                "v-app-bar",
+                {
+                  staticStyle: { "border-radius": "0" },
+                  attrs: { color: "deep-purple accent-4", dark: "" },
+                },
+                [
+                  _c("v-app-bar-nav-icon", {
+                    on: {
+                      click: function ($event) {
+                        $event.stopPropagation()
+                        _vm.drawer = !_vm.drawer
+                      },
+                    },
+                  }),
+                  _vm._v(" "),
+                  _c("v-spacer"),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    { attrs: { icon: "" }, on: { click: _vm.logout } },
+                    [_c("v-icon", [_vm._v("mdi-logout")])],
+                    1
+                  ),
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "v-navigation-drawer",
+                {
+                  attrs: { absolute: "", bottom: "", temporary: "" },
+                  model: {
+                    value: _vm.drawer,
+                    callback: function ($$v) {
+                      _vm.drawer = $$v
+                    },
+                    expression: "drawer",
+                  },
+                },
+                [
+                  _c(
+                    "v-list",
+                    { attrs: { nav: "", dense: "" } },
+                    [
+                      _c(
+                        "v-list-item-group",
+                        {
+                          attrs: {
+                            "active-class": "deep-purple--text text--accent-4",
+                          },
+                        },
+                        [
+                          _vm.canFlights
+                            ? _c(
+                                "v-list-item",
+                                [
+                                  _c(
+                                    "router-link",
+                                    {
+                                      staticStyle: {
+                                        "text-decoration": "none",
+                                      },
+                                      attrs: { to: "/flights" },
+                                    },
+                                    [_vm._v("Flights")]
+                                  ),
+                                ],
+                                1
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c(
+                                "router-link",
+                                {
+                                  staticStyle: { "text-decoration": "none" },
+                                  attrs: { to: "/airports" },
+                                },
+                                [_vm._v("Airports")]
+                              ),
+                            ],
+                            1
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "v-list-item",
+                            [
+                              _c(
+                                "router-link",
+                                {
+                                  staticStyle: { "text-decoration": "none" },
+                                  attrs: { to: "/airlines" },
+                                },
+                                [_vm._v("Airlines")]
+                              ),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  ),
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-card-text", [_c("router-view")], 1),
+            ],
+            1
+          )
+        : _c("router-view"),
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/LoginComponent.vue?vue&type=template&id=4d2414bf&":
 /*!**************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/LoginComponent.vue?vue&type=template&id=4d2414bf& ***!
@@ -30662,7 +31081,7 @@ var render = function () {
     "v-card",
     {
       staticClass: "mx-auto my-12 pa-6",
-      attrs: { "max-width": "90%", "min-width": "374" },
+      attrs: { "max-width": "90%", width: "374" },
     },
     [
       _c("v-card-title", [_vm._v("Login")]),

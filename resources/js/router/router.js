@@ -12,7 +12,7 @@ const Airlines = Vue.component('airlinelist-component', require('../components/A
 
 
 const routes = [
-	{ path: '/', component: Login },
+	{ path: '/', component: Login, name:"login" },
 	{ path: '/flights', component: Flights },
 	{ path: '/airports', component: Airports },
 	{ path: '/airlines', component: Airlines },
@@ -26,6 +26,13 @@ const routes = [
 // keep it simple for now.
 const router = new Router({
   routes // short for `routes: routes`
+})
+
+router.beforeEach((to, from, next) => {
+	if (to.name != "login" && !localStorage.tokenAuth){
+   		next({ name: 'login' })
+	}
+  else next()
 })
 
 export default router;

@@ -1,5 +1,5 @@
 <template>
-    <v-card  class="mx-auto my-12 pa-6" max-width="90%" min-width="374">
+    <v-card  class="mx-auto my-12 pa-6" max-width="90%" width="374">
         <v-card-title>Login</v-card-title>
         <v-alert v-if="errors" type="error">
             {{errors}}
@@ -79,6 +79,7 @@
                     }
                 }else{
                     localStorage.tokenAuth = e.data.data.token;
+                    this.$root.$emit("login",true);
                     this.$router.push('/flights');
                 }
             }

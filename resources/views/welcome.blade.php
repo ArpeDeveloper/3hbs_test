@@ -14,7 +14,7 @@
 <body class="antialiased">
     <div id="app">
         <v-app app>
-            <router-view />
+            <navbar-component />
         </v-app>
     </div>
     <script src="{{ asset('js/app.js') }}"></script>

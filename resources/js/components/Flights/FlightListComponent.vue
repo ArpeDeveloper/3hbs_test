@@ -185,6 +185,10 @@
                 if(e.response.data.message){
                     //this.renderError(e.response.data.message);
                     console.error(e.response.data.message);
+                    if(e.response.status == "403"){
+                        this.$root.$emit("canFlights",false);
+                        this.$router.push("/airports");
+                    }
                 }
             },
             close(){
