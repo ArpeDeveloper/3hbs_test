@@ -49,4 +49,6 @@
 - Ejecutar las migraciones php artisan migrate
 - Ejecutar los seeders php artisan db:seed
 - Cambiar las variables del archivo env de vue
+- El usuario con el rol "admin" es: admin@outlook.com y su contraseña es: admin
+- Los otros usuarios con el rol "operations" tienen la contraseña: password
 
