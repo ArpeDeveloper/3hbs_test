@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost/3hbs_test/public/api';
+const apiUrl = process.env.MIX_API_HOST;
 export function api(){
 	return {
 		login: function(data) {

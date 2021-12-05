@@ -6320,7 +6320,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "api": () => (/* binding */ api)
 /* harmony export */ });
-var apiUrl = 'http://localhost/3hbs_test/public/api';
+var apiUrl = "http://localhost/3hbs_test/public/api";
 function api() {
   return {
     login: function login(data) {
