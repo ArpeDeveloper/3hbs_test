@@ -37,3 +37,16 @@
 
 ### Puntos extras: 
 - Implementar modelo polimórfico de Remarks y relacionar con modelos creados
+
+#Instrucciones para ejecutar el proyecto:
+- Clonar el proyecto del repositorio
+- Ejecutar el comando composer install
+- Ejecutar el comando npm install
+- Copiar el archivo .env.example y renombrarlo a .env
+- Cambiar las variables del archivo .env como la configuaración de la base de datos (nombre, usuario, contraseña) 
+- Generar la llave del proyecto php artisan key: generate
+- Crear una base de datos
+- Ejecutar las migraciones php artisan migrate
+- Ejecutar los seeders php artisan db:seed
+- Cambiar las variables del archivo env de vue
+
