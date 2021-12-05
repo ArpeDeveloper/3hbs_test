@@ -51,7 +51,7 @@ class FlightPolicy
      * @param  \App\Models\Flight  $flight
      * @return mixed
      */
-    public function update(User $user, Flight $flight)
+    public function update(User $user)
     {
         return $user->hasPermissionTo('update flight');
     }
@@ -63,7 +63,7 @@ class FlightPolicy
      * @param  \App\Models\Flight  $flight
      * @return mixed
      */
-    public function delete(User $user, Flight $flight)
+    public function delete(User $user)
     {
         return $user->hasPermissionTo('delete flight');
     }

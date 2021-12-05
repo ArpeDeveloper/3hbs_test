@@ -137,7 +137,7 @@ class FlightController extends Controller
     public function destroy($id)
     {
         try{
-            if ($request->user()->cannot('delete', Flight::class)) {
+            if (auth()->user()->cannot('delete', Flight::class)) {
                 return $this->error('Forbidden',403);
             }
 
